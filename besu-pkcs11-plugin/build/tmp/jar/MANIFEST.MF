@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: besu-pkcs11-plugin
-Implementation-Version: 1.1.0
-
