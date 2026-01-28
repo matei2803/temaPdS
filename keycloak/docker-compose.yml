@@ -1,0 +1,60 @@
+services:
+  keycloak-db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: parola
+    volumes:
+      - keycloak_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak -d keycloak"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - waltnet
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    restart: unless-stopped
+    command:
+      - start
+      - --http-enabled=true
+      - --http-port=8090
+      - --proxy-headers=xforwarded
+      - --hostname-strict=false
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: parola
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8090:8090"
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    networks:
+      - waltnet
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    volumes:
+      - ./mailpit-data:/data
+    networks:
+      - waltnet
+
+volumes:
+  keycloak_db:
+
+networks:
+  waltnet:
+    external: true
