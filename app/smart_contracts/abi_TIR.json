@@ -1,0 +1,1080 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "admin",
+				"type": "address"
+			},
+			{
+				"internalType": "address[]",
+				"name": "registrars",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "AccessControlBadConfirmation",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "neededRole",
+				"type": "bytes32"
+			}
+		],
+		"name": "AccessControlUnauthorizedAccount",
+		"type": "error"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "registrar",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "accreditationHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint64",
+				"name": "validFrom",
+				"type": "uint64"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint64",
+				"name": "validUntil",
+				"type": "uint64"
+			},
+			{
+				"indexed": false,
+				"internalType": "enum TrustedIssuerRegistry.Status",
+				"name": "status",
+				"type": "uint8"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "metadataURI",
+				"type": "string"
+			}
+		],
+		"name": "AccreditationUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "registrar",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "capabilityId",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "allowed",
+				"type": "bool"
+			}
+		],
+		"name": "CapabilitySet",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "registrar",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "credDefIdHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "allowed",
+				"type": "bool"
+			}
+		],
+		"name": "CredDefPermissionSet",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "registrar",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint64",
+				"name": "validFrom",
+				"type": "uint64"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint64",
+				"name": "validUntil",
+				"type": "uint64"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "metadataURI",
+				"type": "string"
+			}
+		],
+		"name": "IssuerAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "registrar",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint64",
+				"name": "validFrom",
+				"type": "uint64"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint64",
+				"name": "validUntil",
+				"type": "uint64"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "metadataURI",
+				"type": "string"
+			}
+		],
+		"name": "IssuerCoreUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "registrar",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "enum TrustedIssuerRegistry.Status",
+				"name": "newStatus",
+				"type": "uint8"
+			}
+		],
+		"name": "IssuerStatusChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "registrar",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "IssuerUpsertedBatch",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "Paused",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "previousAdminRole",
+				"type": "bytes32"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "newAdminRole",
+				"type": "bytes32"
+			}
+		],
+		"name": "RoleAdminChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			}
+		],
+		"name": "RoleGranted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			}
+		],
+		"name": "RoleRevoked",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "registrar",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "schemaIdHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "allowed",
+				"type": "bool"
+			}
+		],
+		"name": "SchemaPermissionSet",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "Unpaused",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "DEFAULT_ADMIN_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "REGISTRAR_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "did",
+				"type": "string"
+			},
+			{
+				"internalType": "uint64",
+				"name": "validFrom",
+				"type": "uint64"
+			},
+			{
+				"internalType": "uint64",
+				"name": "validUntil",
+				"type": "uint64"
+			},
+			{
+				"internalType": "string",
+				"name": "metadataURI",
+				"type": "string"
+			},
+			{
+				"internalType": "bytes32[]",
+				"name": "capabilityIds",
+				"type": "bytes32[]"
+			}
+		],
+		"name": "addIssuer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "credDefIdHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "canIssueCredDefForHash",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "schemaIdHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "canIssueSchemaForHash",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "did",
+				"type": "string"
+			}
+		],
+		"name": "didKey",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "getIssuerCore",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "exists",
+				"type": "bool"
+			},
+			{
+				"internalType": "enum TrustedIssuerRegistry.Status",
+				"name": "issuerStatus",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint64",
+				"name": "validFrom",
+				"type": "uint64"
+			},
+			{
+				"internalType": "uint64",
+				"name": "validUntil",
+				"type": "uint64"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "accreditationHash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "enum TrustedIssuerRegistry.Status",
+				"name": "accreditationStatus",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint64",
+				"name": "accreditationValidFrom",
+				"type": "uint64"
+			},
+			{
+				"internalType": "uint64",
+				"name": "accreditationValidUntil",
+				"type": "uint64"
+			},
+			{
+				"internalType": "string",
+				"name": "metadataURI",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			}
+		],
+		"name": "getRoleAdmin",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "grantRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "capabilityId",
+				"type": "bytes32"
+			}
+		],
+		"name": "hasCapability",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "hasRole",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "isAccreditedNowHash",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "didHash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "schemaIdHash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "credDefIdHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "isTrustedIssuerForHash",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "pause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "paused",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "callerConfirmation",
+				"type": "address"
+			}
+		],
+		"name": "renounceRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "revokeRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "did",
+				"type": "string"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "accreditationHash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "uint64",
+				"name": "validFrom",
+				"type": "uint64"
+			},
+			{
+				"internalType": "uint64",
+				"name": "validUntil",
+				"type": "uint64"
+			},
+			{
+				"internalType": "enum TrustedIssuerRegistry.Status",
+				"name": "accStatus",
+				"type": "uint8"
+			},
+			{
+				"internalType": "string",
+				"name": "metadataURI",
+				"type": "string"
+			}
+		],
+		"name": "setAccreditation",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "did",
+				"type": "string"
+			},
+			{
+				"internalType": "bytes32[]",
+				"name": "capabilityIds",
+				"type": "bytes32[]"
+			},
+			{
+				"internalType": "bool",
+				"name": "allowed",
+				"type": "bool"
+			}
+		],
+		"name": "setCapabilities",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "did",
+				"type": "string"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "capabilityId",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bool",
+				"name": "allowed",
+				"type": "bool"
+			}
+		],
+		"name": "setCapability",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "did",
+				"type": "string"
+			},
+			{
+				"internalType": "bytes32[]",
+				"name": "credDefIdHashes",
+				"type": "bytes32[]"
+			},
+			{
+				"internalType": "bool",
+				"name": "allowed",
+				"type": "bool"
+			}
+		],
+		"name": "setCredDefPermissions",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "did",
+				"type": "string"
+			},
+			{
+				"internalType": "enum TrustedIssuerRegistry.Status",
+				"name": "newStatus",
+				"type": "uint8"
+			}
+		],
+		"name": "setIssuerStatus",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "did",
+				"type": "string"
+			},
+			{
+				"internalType": "bytes32[]",
+				"name": "schemaIdHashes",
+				"type": "bytes32[]"
+			},
+			{
+				"internalType": "bool",
+				"name": "allowed",
+				"type": "bool"
+			}
+		],
+		"name": "setSchemaPermissions",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes4",
+				"name": "interfaceId",
+				"type": "bytes4"
+			}
+		],
+		"name": "supportsInterface",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "unpause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "did",
+				"type": "string"
+			},
+			{
+				"internalType": "uint64",
+				"name": "newValidFrom",
+				"type": "uint64"
+			},
+			{
+				"internalType": "uint64",
+				"name": "newValidUntil",
+				"type": "uint64"
+			},
+			{
+				"internalType": "string",
+				"name": "newMetadataURI",
+				"type": "string"
+			}
+		],
+		"name": "updateIssuerCore",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "did",
+				"type": "string"
+			},
+			{
+				"components": [
+					{
+						"internalType": "uint64",
+						"name": "validFrom",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "validUntil",
+						"type": "uint64"
+					},
+					{
+						"internalType": "string",
+						"name": "metadataURI",
+						"type": "string"
+					},
+					{
+						"internalType": "bytes32[]",
+						"name": "addCapabilities",
+						"type": "bytes32[]"
+					},
+					{
+						"internalType": "bytes32[]",
+						"name": "removeCapabilities",
+						"type": "bytes32[]"
+					}
+				],
+				"internalType": "struct TrustedIssuerRegistry.IssuerCoreInput",
+				"name": "core",
+				"type": "tuple"
+			},
+			{
+				"components": [
+					{
+						"internalType": "bytes32",
+						"name": "hash",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "uint64",
+						"name": "validFrom",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "validUntil",
+						"type": "uint64"
+					},
+					{
+						"internalType": "enum TrustedIssuerRegistry.Status",
+						"name": "status",
+						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "metadataURI",
+						"type": "string"
+					}
+				],
+				"internalType": "struct TrustedIssuerRegistry.AccreditationInput",
+				"name": "acc",
+				"type": "tuple"
+			},
+			{
+				"components": [
+					{
+						"internalType": "bytes32[]",
+						"name": "schemaIdHashes",
+						"type": "bytes32[]"
+					},
+					{
+						"internalType": "bool",
+						"name": "schemaAllowed",
+						"type": "bool"
+					},
+					{
+						"internalType": "bytes32[]",
+						"name": "credDefIdHashes",
+						"type": "bytes32[]"
+					},
+					{
+						"internalType": "bool",
+						"name": "credDefAllowed",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct TrustedIssuerRegistry.ScopeInput",
+				"name": "scope",
+				"type": "tuple"
+			}
+		],
+		"name": "upsertIssuerWithAccreditationAndScope",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
