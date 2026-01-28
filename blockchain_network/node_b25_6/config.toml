@@ -1,0 +1,34 @@
+data-path = "/var/besu-25.4.0/node_b25_6/data"
+genesis-file = "/var/besu-25.4.0/genesis.json"
+
+security-module = "pkcs11-hsm"
+plugin-pkcs11-hsm-config-path = "/var/besu-25.4.0/node_b25_6/pkcs11/pkcs11-hsm.cfg"
+plugin-pkcs11-hsm-key-alias = "besu-validator-6"
+plugin-pkcs11-hsm-ask-password = true
+
+data-storage-format = "FOREST"
+p2p-port = 30316
+discovery-enabled = true
+#ipv6
+p2p-host = "fd00::1"
+rpc-http-host = "fd00::1"
+rpc-ws-host = "fd00::1"
+metrics-host = "fd00::1"
+
+bootnodes = ["enode://87d10b09081036693aa8da2bd2d9a25d6f9d1f8058cb76d3d0c12a385d468477826480581e4ecfc1be9a97d45febbfa62c4c04680d6b8214f4d95dd5375a480b@192.168.93.132:30308"]
+
+rpc-http-enabled = true
+rpc-http-port = 8566
+rpc-http-api = ["ADMIN","DEBUG","ETH","NET","QBFT","WEB3","TXPOOL"]
+host-allowlist = ["*"]
+rpc-http-cors-origins = ["all"]
+
+rpc-ws-enabled = true
+rpc-ws-port = 8576
+rpc-ws-api = ["ETH","NET","QBFT","WEB3","TXPOOL"]
+
+profile = "ENTERPRISE"
+logging = "INFO"
+
+metrics-enabled = true
+metrics-port = 9556
